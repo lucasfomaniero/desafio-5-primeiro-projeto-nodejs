@@ -24,13 +24,47 @@ class TransactionsRepository {
   }
 
   public getBalance(): Balance {
-    //TODO
+    let income = 0;
+    let outcome = 0;
+    // Pode melhorar. Descobrir como.
+    this.transactions.forEach(transaction => {
+      if (transaction.type === 'income') {
+        income += transaction.value;
+      } else {
+        outcome += transaction.value;
+      }
+    });
+    const balance: Balance = {
+      income,
+      outcome,
+      total: income - outcome,
+    };
+
+    return balance;
   }
 
-  public create({title, value, type}: CreateTransactionDTO): Transaction {
+  public create({ title, value, type }: CreateTransactionDTO): Transaction {
     const transaction = new Transaction({ title, value, type });
-    this.transactions = [...this.transactions, transaction];
+    if (
+      transaction.type === 'outcome' &&
+      transaction.value > this.getBalance().total
+    ) {
+      throw new Error('The transaction value is greater than account balance.');
+    }
+    this.transactions.push(transaction);
     return transaction;
+  }
+
+  public isValidTransaction(transaction: Transaction): boolean {
+    console.log(this.getBalance());
+
+    const isValid =
+      transaction.type === 'outcome'
+        ? this.getBalance().total >= transaction.value
+        : transaction.value > 0;
+    console.log(isValid);
+
+    return isValid;
   }
 }
 
