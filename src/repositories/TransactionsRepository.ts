@@ -56,15 +56,12 @@ class TransactionsRepository {
   }
 
   public isValidTransaction(transaction: Transaction): boolean {
-    console.log(this.getBalance());
-
-    const isValid =
+    const isValidTransaction =
       transaction.type === 'outcome'
         ? this.getBalance().total >= transaction.value
         : transaction.value > 0;
-    console.log(isValid);
 
-    return isValid;
+    return isValidTransaction;
   }
 }
 

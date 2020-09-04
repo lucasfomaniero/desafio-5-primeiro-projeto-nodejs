@@ -36,7 +36,7 @@ transactionRouter.post('/', (request, response) => {
       return response.status(200).json(createdTransaction);
     }
     return response.status(400).json({
-      error: `The transaction's value is greater than the account balance.`,
+      error: `The transaction's value is greater than account balance.`,
     });
   } catch (err) {
     return response.status(400).json({ error: err.message });
